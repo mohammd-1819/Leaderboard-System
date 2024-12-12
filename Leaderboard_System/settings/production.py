@@ -1,18 +1,15 @@
-from base import *
+import os
+from .base import *
+import dj_database_url
 
 ALLOWED_HOSTS = ['*']
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'leaderboard_system',
-#         'USER': "postgres",
-#         'PASSWORD': 'admin',
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }
-# }
+DEBUG = False
 
+DATABASES = {
+
+    'default': dj_database_url.config(default=os.environ.get('POSTGRESQL_DATABASE_URL'))
+}
 
 # Security settings
 SECURE_SSL_REDIRECT = True

@@ -1,0 +1,10 @@
+{
+  "app": "leaderbordsys",
+  "platform": "django",
+  "disks": [
+    {
+      "name": "leaderboardsys-disk",
+      "mountTo": "database"
+    }
+  ]
+}
