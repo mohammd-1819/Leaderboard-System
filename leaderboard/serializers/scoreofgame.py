@@ -38,9 +38,10 @@ class LeaderboardSerializer(serializers.ModelSerializer):
 
 
 class ScoreSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
     game = serializers.StringRelatedField()
 
     class Meta:
         model = ScoreOfGame
-        fields = ('game', 'score')
+        fields = ('user', 'game', 'score')
         read_only_fields = ('created_at',)

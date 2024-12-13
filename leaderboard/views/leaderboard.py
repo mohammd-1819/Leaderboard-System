@@ -14,7 +14,8 @@ class GameLeaderboardView(APIView, Pagination):
 
     @extend_schema(
         tags=['Leaderboards'],
-        auth=[]
+        auth=[],
+        summary= 'Leaderboard of a single game'
     )
     def get(self, request, game_name):
         game_scores = ScoreOfGame.objects.filter(game__name__contains=game_name).order_by('-score')
@@ -30,10 +31,11 @@ class UserScoreView(APIView, Pagination):
     serializer_class = ScoreSerializer
 
     @extend_schema(
-        tags=['Leaderboards']
+        tags=['Leaderboards'],
+        summary='All user scores'
     )
-    def get(self, request, username):
-        scores = ScoreOfGame.objects.filter(user__username=username).order_by('-score')
+    def get(self, request):
+        scores = ScoreOfGame.objects.filter(user=request.user).order_by('-score')
         result = self.paginate_queryset(scores, request)
         serializer = ScoreSerializer(result, many=True)
         return self.get_paginated_response(serializer.data)
@@ -44,11 +46,12 @@ class UserGameScoreView(APIView):
     serializer_class = ScoreSerializer
 
     @extend_schema(
-        tags=['Leaderboards']
+        tags=['Leaderboards'],
+        summary='User score in a single game'
     )
-    def get(self, request, username, game_name):
+    def get(self, request, game_name):
         try:
-            score = ScoreOfGame.objects.get(user__username=username, game__name=game_name)
+            score = ScoreOfGame.objects.get(user=request.user, game__name=game_name)
             serializer = ScoreSerializer(score)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except ScoreOfGame.DoesNotExist:
